@@ -40,10 +40,10 @@ class ApplicationController < ActionController::API
   end
 
   def required_permission
-    permissions[action_name]
+    self.class.permissions[action_name]
   end
 
-  def permissions
+  def self.permissions
     @permissions ||= {
         'index' => 'read',
         'show' => 'read',

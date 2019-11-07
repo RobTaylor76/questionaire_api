@@ -1,7 +1,5 @@
 class QuestionsController < ApplicationController
 
-  deserializable_resource :questions, only: [:index]
-
   def index
 
     questions = current_client.questions.joins(:inspection_type).where( inspection_types: {uuid: params[:inspection_type_id]})

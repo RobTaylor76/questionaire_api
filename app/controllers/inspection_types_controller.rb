@@ -1,7 +1,5 @@
 class InspectionTypesController < ApplicationController
 
-  deserializable_resource :inspection_type, only: [:index, :show]
-
   def index
 
     inspection_types = current_client.inspection_types.all

@@ -1,7 +1,5 @@
 class InspectionsController < ApplicationController
 
-  deserializable_resource :inspections, only: [:index, :show, :update]
-
   def index
 
     inspections = current_client.inspections.joins(:inspection_type).where( inspection_types: {uuid: params[:inspection_type_id]})

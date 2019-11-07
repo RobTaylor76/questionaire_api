@@ -4,7 +4,9 @@ Rails.application.routes.draw do
     with_options constraints: lambda {|req| req.format == :json} do |json_only|
       json_only.resources :inspection_types, only: [:index, :show] do
         json_only.resources :questions, only: [:index]
-        json_only.resources :inspections, only: [:index, :show, :update]
+        json_only.resources :inspections, only: [:index, :show] do
+          json_only.resources :answers, only: [:index, :update]
+        end
       end
 
     end

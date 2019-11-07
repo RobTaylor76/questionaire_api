@@ -8,7 +8,7 @@
 
 
 def find_and_update_or_create(model_or_relation, finder, data)
-  thing =  model_or_relation.find_by(finder)
+  thing = model_or_relation.find_by(finder)
   if thing.present?
     thing.update_columns(data)
     thing
@@ -16,7 +16,6 @@ def find_and_update_or_create(model_or_relation, finder, data)
     model_or_relation.create(data)
   end
 end
-
 
 
 uuid = '918d0752-d251-4e78-bcdf-fe4d77a4b8fa'
@@ -32,13 +31,13 @@ client = find_and_update_or_create(Client, {uuid: uuid}, client_data)
 
 [
     {
-        uuid:  '918d0752-4e78-d251-bcdf-fe4d77a4b8fa',
+        uuid: '918d0752-4e78-d251-bcdf-fe4d77a4b8fa',
         interval: 7,
         name: 'Inspect The Garden',
         first_inspection_date: 3.weeks.ago
     },
     {
-        uuid:  '918d0752-d251-bcdf-4e78-fe4d77a4b8fa',
+        uuid: '918d0752-d251-bcdf-4e78-fe4d77a4b8fa',
         interval: 14,
         name: 'Inspect The House',
         first_inspection_date: 3.weeks.ago
@@ -61,13 +60,13 @@ client = find_and_update_or_create(Client, {uuid: uuid}, client_data)
 
 [
     {
-        uuid:  'fe4d77a4b8fa-918d0752-4e78-d251-bcdf',
+        uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-bcdf',
         interval: 17,
         name: 'Inspect The Garage',
         first_inspection_date: 3.weeks.ago
     },
     {
-        uuid:  'fe4d77a4b8fa-918d0752-d251-bcdf-4e78',
+        uuid: 'fe4d77a4b8fa-918d0752-d251-bcdf-4e78',
         interval: 21,
         name: 'Inspect The Shed',
         first_inspection_date: 3.days.ago
@@ -97,20 +96,45 @@ inspection_type = InspectionType.find_by(uuid: '918d0752-d251-bcdf-4e78-fe4d77a4
 
 [
     {
-        uuid:  'fe4d77a4b8fa-918d0752-4e78-d251-1',
+        uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-1',
         sequence: 1,
         text: 'When was the grass cut?',
-        answers: [{display_text: 'Today', value: 100},{display_text: 'This week', value: 75},{display_text: 'Last week', value: 50},{display_text: "It's been a while", value: 75}]
+        answers: [{uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-2', display_text: 'Today', value: 100},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-3', display_text: 'This week', value: 75},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-4', display_text: 'Last week', value: 50},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-5', display_text: "It's been a while", value: 75}]
     },
     {
-        uuid:  'fe4d77a4b8fa-918d0752-4e78-d251-2',
+        uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-2',
         sequence: 2,
         text: 'Has the hedge been trimmed?',
-        answers: [{display_text: 'Today', value: 100},{display_text: 'This week', value: 75},{display_text: 'Last week', value: 50}, {display_text: "It's been a while", value: 75}],
+        answers: [{uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-2', display_text: 'Today', value: 100},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-3', display_text: 'This week', value: 75},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-4', display_text: 'Last week', value: 50},
+                  {uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-5', display_text: "It's been a while", value: 75}],
         allow_not_applicable_response: true
     }
 ].each do |question|
-  find_and_update_or_create(inspection_type.questions, {uuid: question[:uuid]}, question.merge( {client_id: inspection_type.client_id }))
+  find_and_update_or_create(inspection_type.questions, {uuid: question[:uuid]}, question.merge({client_id: inspection_type.client_id}))
 end
 
 
+inspection = inspection_type.inspections.first
+
+answers = [
+    {
+        uuid: 'fe4d77a4b8fa-918d0752-4e78-d251-bcdf',
+        question_id: 'fe4d77a4b8fa-918d0752-4e78-d251-1',
+        answer_id: 'fe4d77a4b8fa-918d0752-4e78-d251-4',
+        not_applicable: false
+    },
+    {
+        uuid: 'fe4d77a4b8fa-918d0752-4e78-bcdf-d251',
+        question_id: 'fe4d77a4b8fa-918d0752-4e78-d251-2',
+        answer_id: nil,
+        not_applicable: true
+    },
+]
+
+inspection.answers = answers
+inspection.save

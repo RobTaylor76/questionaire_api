@@ -32,10 +32,10 @@ describe 'Inspection Type Questions', type: :request do
 
       expect(body[:data]).to eq([{:attributes=>
                                       {:answers=>
-                                           [{:display_text=>"Today", :value=>100},
-                                            {:display_text=>"This week", :value=>75},
-                                            {:display_text=>"Last week", :value=>50},
-                                            {:display_text=>"It's been a while", :value=>75}],
+                                           [{:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-2", :display_text=>"Today", :value=>100},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-3", :display_text=>"This week", :value=>75},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-4", :display_text=>"Last week", :value=>50},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-5", :display_text=>"It's been a while", :value=>75}],
                                        :sequence=>1,
                                        :text=>"When was the grass cut?",
                                        :allow_not_applicable_response=>false},
@@ -43,10 +43,10 @@ describe 'Inspection Type Questions', type: :request do
                                   :type=>"question"},
                                  {:attributes=>
                                       {:answers=>
-                                           [{:display_text=>"Today", :value=>100},
-                                            {:display_text=>"This week", :value=>75},
-                                            {:display_text=>"Last week", :value=>50},
-                                            {:display_text=>"It's been a while", :value=>75}],
+                                           [{:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-2",:display_text=>"Today", :value=>100},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-3",:display_text=>"This week", :value=>75},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-4",:display_text=>"Last week", :value=>50},
+                                            {:uuid=>"fe4d77a4b8fa-918d0752-4e78-d251-5",:display_text=>"It's been a while", :value=>75}],
                                        :sequence=>2,
                                        :text=>"Has the hedge been trimmed?",
                                        :allow_not_applicable_response=>true},

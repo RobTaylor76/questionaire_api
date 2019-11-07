@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_06_230131) do
+ActiveRecord::Schema.define(version: 2019_11_07_102850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(version: 2019_11_06_230131) do
     t.string "uuid"
     t.boolean "complete", default: false
     t.integer "score"
+    t.jsonb "answers", default: []
     t.index ["client_id"], name: "index_inspections_on_client_id"
     t.index ["inspection_type_id"], name: "index_inspections_on_inspection_type_id"
   end

@@ -2,7 +2,7 @@ class InspectionsController < ApplicationController
 
   def index
 
-    inspections = current_client.inspections.joins(:inspection_type).where( inspection_types: {uuid: params[:inspection_type_id]})
+    inspections = current_client.inspections.joins(:inspection_type).where( inspection_types: {uuid: params[:inspection_type_id]}).order(:due_date)
     render jsonapi: inspections,
            status: :ok
 
@@ -10,9 +10,9 @@ class InspectionsController < ApplicationController
 
   def show
 
-    inspections = current_client.inspections.joins(:inspection_type).where({ inspection_types: {uuid: params[:inspection_type_id]},
+    inspection = current_client.inspections.joins(:inspection_type).where({ inspection_types: {uuid: params[:inspection_type_id]},
                                                                              inspections: {uuid: params[:id]}})
-    render jsonapi: inspections,
+    render jsonapi: inspection,
            status: :ok
 
   end

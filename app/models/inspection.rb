@@ -5,7 +5,7 @@ class Inspection < ApplicationRecord
   before_save :update_if_inspection_completed
 
   def update_if_inspection_completed
-    self.complete = all_questions_answered?
+    self.complete = (answers.size > 0 && all_questions_answered?)
     if self.complete && self.score.nil?
       self.score = calculate_score
     end
@@ -20,15 +20,17 @@ class Inspection < ApplicationRecord
   end
 
   def calculate_score
-    answered_questions_to_score = answers.select{ |answer| answer['answer_id'].present? }
-
     inspection_type.questions.map do |question|
-      answer_for_question = find_answer_for_question(question, answered_questions_to_score)
-      answer_definition = question.answers.find { |answer| answer['uuid'] == answer_for_question['answer_id'] }
-      if answer_definition.present?
-        answer_definition['value']
+      answer_for_question = find_answer_for_question(question, answers)
+      if (answer_for_question['not_applicable'] == true)
+        0 # not answered
       else
-        0  # invalid answer!!!!
+        answer_definition = question.answers.find { |answer| answer['uuid'] == answer_for_question['answer_id'] }
+        if answer_definition.present?
+          answer_definition['value']
+        else
+          0 # invalid answer!!!!
+        end
       end
     end.reduce(0, :+)
   end

@@ -35,7 +35,7 @@ describe 'Inspections', type: :request do
       expect(body[:data].size).to eq(inspection_type.inspections.size)
 
       #first one should  == the inspection_types
-      expect(body[:data][0]).to eq({:attributes => {:complete => false, :due_date => inspection_type.first_inspection_date.to_s, :score => nil}, :id => "1-uuid-kkk", :type => "inspection"})
+      expect(body[:data][0]).to eq({:attributes => {:complete => true, :due_date => inspection_type.first_inspection_date.to_s, :score => 50}, :id => "1-uuid-kkk", :type => "inspection"})
     end
 
     xit 'should allow pagination of the inspections as there may be many' do
@@ -51,7 +51,7 @@ describe 'Inspections', type: :request do
                                       }, 1.hour.from_now)
 
       inspection_type = InspectionType.find_by(uuid: '918d0752-d251-bcdf-4e78-fe4d77a4b8fa')
-      inspection = inspection_type.inspections.first
+      inspection = inspection_type.inspections.order(:due_date).first
 
       get inspection_type_inspection_path('918d0752-d251-bcdf-4e78-fe4d77a4b8fa', inspection.uuid), params: {},
           headers: {'Authorization' => jwt_token, Accept: 'application/vnd.api+json'}
@@ -60,7 +60,6 @@ describe 'Inspections', type: :request do
 
 
       body = JSON.parse(response.body, symbolize_names: true)
-
 
       expect(body[:data].size).to eq(1)
 

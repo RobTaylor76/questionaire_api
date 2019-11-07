@@ -76,22 +76,6 @@ client = find_and_update_or_create(Client, {uuid: uuid}, client_data)
 
 end
 
-
-Inspection.delete_all
-
-InspectionType.all.each do |inspection_type|
-
-  count = 0
-  inspection_date = inspection_type.first_inspection_date
-
-  while inspection_date < inspection_time_frame_end
-    count += 1
-    inspection = inspection_type.inspections.create!({due_date: inspection_date, client_id: inspection_type.client_id, uuid: "#{count}-uuid-kkk"})
-    inspection_date = inspection_date + inspection_type.interval.days
-
-  end
-end
-
 inspection_type = InspectionType.find_by(uuid: '918d0752-d251-bcdf-4e78-fe4d77a4b8fa')
 
 [
@@ -118,6 +102,22 @@ inspection_type = InspectionType.find_by(uuid: '918d0752-d251-bcdf-4e78-fe4d77a4
   find_and_update_or_create(inspection_type.questions, {uuid: question[:uuid]}, question.merge({client_id: inspection_type.client_id}))
 end
 
+Inspection.delete_all
+
+InspectionType.all.each do |inspection_type|
+
+  count = 0
+  inspection_date = inspection_type.first_inspection_date
+
+  while inspection_date < inspection_time_frame_end
+    count += 1
+    inspection = inspection_type.inspections.create!({due_date: inspection_date, client_id: inspection_type.client_id, uuid: "#{count}-uuid-kkk"})
+    inspection_date = inspection_date + inspection_type.interval.days
+
+  end
+end
+
+inspection_type.reload
 
 inspection = inspection_type.inspections.first
 

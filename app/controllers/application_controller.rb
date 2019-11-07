@@ -56,14 +56,19 @@ class ApplicationController < ActionController::API
   end
 
   def render_unauthorized
+    render_json_api_error("401", "Not Authorized", "Need api scope: #{required_scope}")
+  end
+
+  def render_json_api_error(status, title, detail, source = {})
     render json: {
         "errors": [
             {
-                "status": "401",
-                "source": {},
-                "title": "Not Authorized",
-                "detail": "Need api scope: #{required_scope}"
+                "status": status,
+                "source": source,
+                "title": title,
+                "detail": detail
             }
-        ]}, status: 401
+        ]}, status: status
   end
+
 end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       json_only.resources :inspection_types, only: [:index, :show] do
         json_only.resources :questions, only: [:index]
         json_only.resources :inspections, only: [:index, :show] do
-          json_only.resources :answers, only: [:index, :update]
+          json_only.resource :answers, only: [:show, :update]
         end
       end
 

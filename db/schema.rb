@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_102850) do
+ActiveRecord::Schema.define(version: 2019_11_07_143511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_102850) do
   create_table "clients", force: :cascade do |t|
     t.string "uuid"
     t.string "name"
+    t.index ["uuid"], name: "index_clients_on_uuid"
   end
 
   create_table "inspection_types", force: :cascade do |t|
@@ -27,6 +28,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_102850) do
     t.string "name"
     t.date "first_inspection_date"
     t.index ["client_id"], name: "index_inspection_types_on_client_id"
+    t.index ["uuid"], name: "index_inspection_types_on_uuid"
   end
 
   create_table "inspections", force: :cascade do |t|
@@ -39,6 +41,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_102850) do
     t.jsonb "answers", default: []
     t.index ["client_id"], name: "index_inspections_on_client_id"
     t.index ["inspection_type_id"], name: "index_inspections_on_inspection_type_id"
+    t.index ["uuid"], name: "index_inspections_on_uuid"
   end
 
   create_table "questions", force: :cascade do |t|
@@ -51,6 +54,7 @@ ActiveRecord::Schema.define(version: 2019_11_07_102850) do
     t.jsonb "answers"
     t.index ["client_id"], name: "index_questions_on_client_id"
     t.index ["inspection_type_id"], name: "index_questions_on_inspection_type_id"
+    t.index ["uuid"], name: "index_questions_on_uuid"
   end
 
 end

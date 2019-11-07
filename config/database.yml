@@ -1,0 +1,16 @@
+development: &development
+  adapter: postgresql
+  database: questionaire_dev
+  username: rails_user
+  password:
+  host: localhost
+
+test: &test
+  adapter: postgresql
+  database: questionaire_test
+  username: rails_user
+  password:
+  host: localhost
+
+production:
+  url:  <%= ENV["DATABASE_URL"] %>

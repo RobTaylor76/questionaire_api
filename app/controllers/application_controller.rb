@@ -1,0 +1,69 @@
+class ApplicationController < ActionController::API
+  before_action :authenticate_jwt
+
+  def get_jwt_token
+    @jwt_token ||= request.headers.env["HTTP_AUTHORIZATION"]
+  end
+
+  def jwt_info
+    @jwt_info ||= JsonWebToken.decode(get_jwt_token)
+  end
+
+  def jwt_info_valid?
+    jwt_info.present? && jwt_info['scope'].include?(required_scope)
+  end
+
+  def required_scope
+    raise RuntimeError # Not Defined
+  end
+
+  def authenticate_jwt
+    jwt_info_valid? || render_unauthorized
+  end
+
+
+  #pagination info for kimiari
+  def page_param
+    if params[:page].is_a? ActionController::Parameters
+      params[:page][:number]
+    else
+      params[:page]
+    end
+  end
+
+  def per_page_param
+    if params[:page].is_a? ActionController::Parameters
+      params[:page][:size]
+    else
+      params[:per_page]
+    end
+  end
+
+  def required_permission
+    permissions[action_name]
+  end
+
+  def permissions
+    @permissions ||= {
+        'index' => 'read',
+        'show' => 'read',
+        'update' => 'write'
+    }
+  end
+
+  def current_client
+    @current_client ||= Client.find_by(uuid: jwt_info['client']['uuid']) if jwt_info_valid? && jwt_info['client']['uuid'].present?
+  end
+
+  def render_unauthorized
+    render json: {
+        "errors": [
+            {
+                "status": "401",
+                "source": {},
+                "title": "Not Authorized",
+                "detail": "Need api scope: #{required_scope}"
+            }
+        ]}, status: 401
+  end
+end
